@@ -77,11 +77,12 @@ git checkout feature/[branch-name]
 ## Project-Specific Guidelines
 
 ### Architecture Overview
-This project creates a transparent OpenGL overlay window that aligns with HTML elements in React apps. Key components:
+This project creates a transparent OpenGL overlay window for Electron applications. The overlay can be positioned over any part of the Electron window, including webview content. Key components:
 
-- **Native Addon**: Node.js C++ addon using Node-API
+- **Native Addon**: Node.js C++ addon using Node-API for Electron integration
 - **Platform Layers**: Windows (Win32/DWM), macOS (Cocoa), Linux (X11)
 - **OpenGL Rendering**: Hardware-accelerated drawing on transparent windows
+- **Electron Integration**: Coordinate with Electron's BrowserWindow and webContents
 - **Build System**: CMake for cross-platform compilation
 - **Distribution**: Prebuildify for shipping precompiled binaries
 
@@ -95,7 +96,7 @@ electron-native-overlay/
 │   ├── macos/                    # macOS-specific implementation
 │   └── linux/                    # Linux-specific implementation
 ├── include/                      # Header files
-├── lib/                         # JavaScript API
+├── lib/                         # JavaScript API for Electron
 ├── test/                        # Test files
 ├── CMakeLists.txt              # Build configuration
 └── package.json                # NPM package definition
@@ -212,11 +213,12 @@ npm run test:linux     # Linux only
 ```
 
 ### Manual Testing
-1. Create test React app with target elements
-2. Run overlay demo to verify alignment
+1. Create test Electron app with BrowserWindow
+2. Run overlay demo to verify positioning over Electron window
 3. Test input pass-through behavior
 4. Verify transparency rendering
 5. Check performance and resource usage
+6. Test with different Electron window configurations (frameless, transparent, etc.)
 
 ## Context Management
 

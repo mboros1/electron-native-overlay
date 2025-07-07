@@ -7,13 +7,13 @@
 
 ## Project Context
 
-You are working on a cross-platform native overlay library that creates transparent OpenGL windows aligned with HTML elements in React applications. This library will be distributed as a Node.js addon under the Apache 2.0 license.
+You are working on a cross-platform native overlay library that creates transparent OpenGL windows for Electron applications. The overlay can be positioned anywhere over the Electron window, including webview content. This library will be distributed as a Node.js addon under the Apache 2.0 license.
 
 ### Key Requirements
 - Per-pixel transparency with alpha channel
 - Always-on-top positioning without window decorations
 - Input pass-through (clicks go to underlying app)
-- React integration for element tracking
+- Electron integration for window positioning and coordination
 - Hardware-accelerated OpenGL rendering
 - Precompiled binaries via prebuildify
 
@@ -37,12 +37,14 @@ overlay_manager.cpp     # Platform-agnostic overlay management
 overlay_window.h        # Base class for platform implementations
 ```
 
-**JavaScript API**:
+**JavaScript API (Electron main process)**:
 ```javascript
 const overlay = require('electron-native-overlay');
+const { BrowserWindow } = require('electron');
 
-// Create overlay aligned to element
-overlay.createOverlay(id, x, y, width, height);
+// Create overlay for Electron window
+const win = new BrowserWindow({ /* ... */ });
+overlay.createOverlay(id, x, y, width, height, win.getNativeWindowHandle());
 
 // Update position/size
 overlay.updateOverlay(id, x, y, width, height);
@@ -164,10 +166,11 @@ void SetupOpenGL() {
 - Verify memory management
 
 ### Integration Testing
-- Create test React app
-- Verify pixel-perfect alignment
+- Create test Electron app
+- Verify overlay positioning relative to BrowserWindow
 - Test input pass-through
 - Check transparency rendering
+- Test with various Electron window configurations
 
 ### Platform Testing
 - Test on minimum supported OS versions
